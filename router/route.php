@@ -25,16 +25,17 @@ $mux->get('/plan/uniqueLists', ['Mvc\Controller\Controller', 'uniqueListsPlan'])
 //*plan建立檢查
 $mux->post('/plan/insertCheck', ['Mvc\Controller\Controller', 'insertPlanCheck']);
 
-////*item建立
-//$mux->get('/planItem/new', ['Mvc\Controller\Controller', 'newItem']);
-////*item瀏覽
-//$mux->get('/planItem/lists', ['Mvc\Controller\Controller', 'listsItem']);
+//*item建立
+$mux->post('/planItem/new', ['Mvc\Controller\ListController', 'newItem']);
+//*item瀏覽
+$mux->get('/planItem/lists', ['Mvc\Controller\ListController', 'listsItem']);
 ////*item修改
-//$mux->get('/planItem/edit', ['Mvc\Controller\Controller', 'editItem']);
+//$mux->get('/planItem/edit', ['Mvc\Controller\ListController', 'editItem']);
 ////*item刪除
-//$mux->get('/planItem/del', ['Mvc\Controller\Controller', 'delItem']);
+//$mux->get('/planItem/del', ['Mvc\Controller\ListController', 'delItem']);
 ////*item建立檢查
-//$mux->post('/plan/insertCheck', ['Mvc\Controller\Controller', 'insertCheckItem']);
+//$mux->post('/plan/insertCheck', ['Mvc\Controller\ListController', 'insertCheckItem']);
+
 //
 //$mux->post('/test/plan/new', ['Mvc\Controller\Controller', 'testNewPlan']);
 //

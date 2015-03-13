@@ -6,7 +6,6 @@ class Model
     private static $db = null;
     protected $status = false;
 
-
     public function __construct()
     {
         try {
@@ -23,14 +22,13 @@ class Model
         }
     }
     //*寫入新計畫
-
     public function newPlan($gtPost)
     {
         if ($this->status !== true) {
             return 'error in create!';
         }
         try{
-
+            $this->tripData = array();
             $_title = $gtPost['title'];
             $_introduction = $gtPost['introduction'];
             $_nop = $gtPost['nop'];
@@ -45,8 +43,8 @@ class Model
             $sql->bindvalue (':startDate', $_startDate);
             $sql->bindvalue (':endDate', $_endDate);
             $sql->bindvalue (':description', $_description);
-            $lastId = self::$db->lastInsertId();
-            return ($sql->execute()) ?  self::$db->lastInsertId(): '失敗';
+            $this->triprData = $sql;
+            return ($sql->execute()) ? '成功' : '失敗';
         }catch(PDOException $e){
             return 'error in insert!';
         }
@@ -58,8 +56,10 @@ class Model
             return 'error';
         }
         try {
+            $this->tripList = array();
             $sql = self::$db->prepare("SELECT * FROM plan");
             if ($sql->execute()) {
+                $this->tripList=$sql;
                 return $sql->fetchAll(\PDO::FETCH_ASSOC);
             }else{
                 return false;
@@ -69,8 +69,7 @@ class Model
         }
     }
     //*單一計畫清單
-    public function uniqueListsPlan($id)
-    {
+    public function uniqueListsPlan($id){
         if ($this->status !== true) {
             return false;
         }
@@ -86,12 +85,11 @@ class Model
         }
     }
     //*檢查建立資料是否已存在
-    public function insertPlanCheck($id)
-    {
+    public function  insertPlanCheck($id){
         $sql = self::$db->query("SELECT title FROM plan
         where id='".$id."'");
         if ($sql->fetch()) {
-            return 'success';
+            return $id;
         } else {
             return false;
         }
@@ -103,7 +101,7 @@ class Model
             return 'error in create!';
         }
         try{
-            $_id = $gtPost['id'];
+            $this->tripData = array();
             $_title = $gtPost['title'];
             $_introduction = $gtPost['introduction'];
             $_nop = $gtPost['nop'];
@@ -116,13 +114,14 @@ class Model
                                                        startDate = ':startDate',
                                                        endDate = ':endDate',
                                                        description = ':description'
-                                                       WHERE id = '$_id'");
+                                                       WHERE title = '$_title'");
             $sql->bindvalue (':title', $_title);
             $sql->bindvalue (':introduction', $_introduction);
             $sql->bindvalue (':nop', $_nop);
             $sql->bindvalue (':startDate', $_startDate);
             $sql->bindvalue (':endDate', $_endDate);
             $sql->bindvalue (':description', $_description);
+            $this->triprData = $sql;
             return ($sql->execute()) ? '成功' : '失敗';
         }catch(PDOException $e){
             return false;
@@ -135,12 +134,33 @@ class Model
             return 'error';
         }
         try{
-            $_id = $gtPost['id'];
-            $sql = self::$db->prepare("DELETE FROM plan WHERE id = '$_id' ");
-            $sql->bindvalue (':id', $_id);
+            $this->tripData = array();
+            $_title = $gtPost['title'];
+            var_dump($_title);
+            $sql = self::$db->prepare("DELETE FROM plan WHERE title = '$_title' ");
+            $sql->bindvalue (':title', $_title);
+            $this->triprData = $sql;
             return ($sql->execute()) ? '成功' : '失敗';
         }catch(PDOException $e){
             return false;
+        }
+    }
+    //*單一計畫項目清單
+    public function uniquePlanItemLists($PlanId)
+    {
+        if ($this->status !== true) {
+            return 'error';
+        }
+        var_dump($PlanId);
+        try {
+            $sql = self::$db->prepare("SELECT * FROM planitem where planid = '$PlanId'");
+            if ($sql->execute()) {
+                return $sql->fetchAll(\PDO::FETCH_ASSOC);
+            }else{
+                return 'error in uniquePlanItemLists1!';
+            }
+        }catch(\PDOException $e){
+            return 'error in uniquePlanItemLists2!';
         }
     }
 }

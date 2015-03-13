@@ -32,6 +32,34 @@
     2 => 
     array (
       0 => false,
+      1 => '/planItem/lists',
+      2 => 
+      array (
+        0 => 'Mvc\\Controller\\ListController',
+        1 => 'listsItem',
+      ),
+      3 => 
+      array (
+        'method' => 1,
+      ),
+    ),
+    3 => 
+    array (
+      0 => false,
+      1 => '/planItem/new',
+      2 => 
+      array (
+        0 => 'Mvc\\Controller\\ListController',
+        1 => 'newItem',
+      ),
+      3 => 
+      array (
+        'method' => 2,
+      ),
+    ),
+    4 => 
+    array (
+      0 => false,
       1 => '/plan/lists',
       2 => 
       array (
@@ -43,7 +71,7 @@
         'method' => 1,
       ),
     ),
-    3 => 
+    5 => 
     array (
       0 => false,
       1 => '/plan/edit',
@@ -57,21 +85,7 @@
         'method' => 2,
       ),
     ),
-    4 => 
-    array (
-      0 => false,
-      1 => '/plan/del',
-      2 => 
-      array (
-        0 => 'Mvc\\Controller\\Controller',
-        1 => 'delPlan',
-      ),
-      3 => 
-      array (
-        'method' => 2,
-      ),
-    ),
-    5 => 
+    6 => 
     array (
       0 => false,
       1 => '/plan/new',
@@ -85,7 +99,21 @@
         'method' => 2,
       ),
     ),
-    6 => 
+    7 => 
+    array (
+      0 => false,
+      1 => '/plan/del',
+      2 => 
+      array (
+        0 => 'Mvc\\Controller\\Controller',
+        1 => 'delPlan',
+      ),
+      3 => 
+      array (
+        'method' => 2,
+      ),
+    ),
+    8 => 
     array (
       0 => false,
       1 => '/',

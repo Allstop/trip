@@ -1,23 +1,26 @@
 <!DOCTYPE html>
+<!-- ... 建立遊記 ... -->
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-    </head>
-    <body>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="./css/jquery-ui.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
     <h2 style='color:#8a2f12' id="aaa" name="aaa" onclick="$('#divShow').show();" href="#">建立旅遊計畫</h2>
     <div id="divShow" name="divShow" blockquote style="color:#000000;
-                font-size:13px;
-                background-color:#ffc991;
-                margin-left:15px;
-                margin-right:0px;-webkit-box-shadow:#333333 4px 4px 6px;
-                padding:10px;
-                border:1px dashed #aabbcc;">
-        <p style='color:#1b16da'>遊記名稱(*)：<input type="text" name="title"><br><br>
-            旅行日期：<input type="text" name="startDate" id="datepicker1">
-            ~<input type="text" name="endDate" id="datepicker2"><br><br>
+                        font-size:13px;
+                        background-color:#ffc991;
+                        margin-left:15px;
+                        margin-right:0px;-webkit-box-shadow:#333333 4px 4px 6px;
+                        padding:10px;
+                        border:1px dashed #aabbcc;">
+        <p style='color:#1b16da'>
+            遊記名稱(*)：<input type="text" placeholder="目的地..." class="title" name="title"><br><br>
+            旅行日期：<input type="text" placeholder="起始日..." class="startDate" name="startDate" id="datepicker1">
+            ~<input type="text" placeholder="截止日..." class="endDate" name="endDate" id="datepicker2"><br><br>
         <td>旅行人數:</td>
-        <td><select size="1" name="nop">
+        <td><select size="1" class="nop" name="nop">
             <option value="1" selected>1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -29,14 +32,18 @@
             <option value="9">9</option>
             <option value="10">10</option>
         </select></td><br><br>
-        遊記簡介：<textarea name="introduction" rows="4" cols="20" style='color:#78788a'>輸入你想要寫的內容...</textarea><br><br>
-        描述：<input type="text" name="description"><br><br></p>
-        <input type="submit" name="submit" value="Go" formaction="insertPlanCheck"/>
+        遊記簡介：<textarea placeholder="輸入你想要寫的內容..." class="introduction" name="introduction" rows="4" cols="20"></textarea><br><br>
+        描述：<input placeholder="描述..." type="text" class="description" name="description"><br><br></p>
+        <button id="submit" >GO</button>
         </blockquote>
     </div>
-    </body>
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <script src="./js/main.js"></script>
+    <div class="planLists">
+        <div class="itemLists">
+        </div>
+
+    </div>
+</body>
+<script src="./js/jquery-1.11.2.min.js"></script>
+<script src="./js/jquery-ui.js"></script>
+<script src="./js/main.js"></script>
 </html>
