@@ -69,7 +69,7 @@ $(document).on("click",".item_class",function(){
     tmp = tmpStr.split('：');
     planId =tmp[1];
   listsItem(planId);
-  $('.planLists').append(listsItem(planId));
+  //$('.planLists').append(listsItem(planId));
 });
 //執行del事件
 $(document).on("click",".delete_class",function(){
@@ -99,7 +99,7 @@ $(document).on("click","#submitItem",function(){
       }
   newItem(itemList);
 });
-//建立
+//建立 I think so.
 var newPlan = function() {
   $.ajax({
     url: "http://trip/plan/new",
@@ -222,13 +222,13 @@ var uniqueListsPlan = function(id) {
 
 };
 //建立item
-var newItem = function(planId) {
-  console.log(planId);
+var newItem = function(itemList) {
+  console.log(itemList);
   $.ajax({
     url: "http://trip/planItem/new",
     type: "POST",  //POST or GET 大寫
     dataType: "JSON",
-    data: {id:planId},    // 要傳入的json 物件
+    data: itemList,    // 要傳入的json 物件
     success: function (response) {
       console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
       console.log(response.status);
@@ -241,8 +241,9 @@ var newItem = function(planId) {
   })
 };
 //瀏覽item
-var listsItem = function(itemList) {
+var listsItem = function(planId) {
 
+  console.log(planId);
   $('.itemLists').html('');
   $('.itemLists').append('<table id="listsItem" border="0" width="700" ><tr>');
   $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">起始</td>');
@@ -266,12 +267,11 @@ var listsItem = function(itemList) {
   $('.itemLists').append('<input type="submit" id="submitItem" value="儲存" >');
 
   $.ajax({
-    url: "http://trip/plan/listsItem",
+    url: "http://trip/planItem/lists",
     type: "GET",  //POST or GET 大寫
     dataType: "JSON",
-    data:itemList ,
+    data:{planId:planId} ,
     success: function (response) {
-      console.log(itemList)
       console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
     },
     error: function () {
@@ -283,7 +283,6 @@ var listsItem = function(itemList) {
 };
 
 listsPlan();
-
 
 // JQuery
 // .append()

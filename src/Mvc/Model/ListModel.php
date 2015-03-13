@@ -28,7 +28,6 @@ class ListModel
             return 'error in create!';
         }
         try{
-//            return $getPost;exit;
             $_place = $getPost['planPlaceId'];
             $_planId = $getPost['planId'];
             $_category = $getPost['category'];
@@ -47,21 +46,20 @@ class ListModel
             $sql->bindvalue (':description', $_description);
             $sql->bindvalue (':defaultCost', $_defaultCost);
             $sql->bindvalue (':cost', $_cost);
-//            var_dump($sql->execute());
             return ($sql->execute()) ? '成功' : '失敗';
         }catch(PDOException $e){
             return 'error in insert!';
         }
     }
     //*計畫項目
-    public function listsItem($getPost)
+    public function listsItem($planId)
     {
         if ($this->status !== true) {
             return 'error';
         }
+
         try {
-            $_id = $getPost['id'];
-            $sql = self::$db->prepare("SELECT * FROM planitem where id='".$_id."'");
+            $sql = self::$db->prepare("SELECT * FROM planitem where planId=$planId");
             if ($sql->execute()) {
                 return $sql->fetchAll(\PDO::FETCH_ASSOC);
             }else{

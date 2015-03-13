@@ -42,7 +42,6 @@ class ListController
         if (isset($_POST['planId'])) {
             $itemData['planId'] = $_POST['planId'];
         }
-
         if (isset($_POST['category'])) {
             $itemData['category'] = $_POST['category'];
         }
@@ -108,7 +107,7 @@ class ListController
     //*itemList明細
     public function listsItem()
     {
-        $status = $this->ListModel->listsItem($this->getPost);
+        $status = $this->ListModel->listsItem($_GET['planId']);
         if ($status == false) {
             return View::render(array('status' => $status));
         }else {

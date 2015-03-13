@@ -86,6 +86,7 @@ class Controller
     //*刪除plan資料
     public function delPlan()
     {
+        var_dump($this->getPost);
         $status = $this->Model->delPlan($this->gtPost);
         if ($status == "成功") {
             return View::render(array('status' => "success"));
