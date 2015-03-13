@@ -77,10 +77,10 @@ $(document).on("click",".delete_class",function(){
       tmp = tmpStr.split('：');
   delPlan(tmp[1]);
 });
-//建立item～執行go事件
-$("#submitItem").click(function(){
-
-
+//全域變數
+var itemList={};
+//建立item～執行儲存事件
+$(document).on("click","#submitItem",function(){
     var startTimeVaule = $(".startTime").val();
     var endTimeVaule = $(".endTime").val();
     var placeVaule = $(".place").val();
@@ -88,7 +88,7 @@ $("#submitItem").click(function(){
     var descriptionVaule = $(".description").val();
     var defaultCostVaule = $(".defaultCost").val();
     var costVaule = $(".cost").val();
-    list = {
+    itemList = {
       startTime : startTimeVaule,
       endTime : endTimeVaule,
       category : categoryVaule,
@@ -97,6 +97,7 @@ $("#submitItem").click(function(){
       defaultCost : defaultCostVaule,
       cost : costVaule
     }
+  console.log(itemList)
   newItem();
 });
 //建立
@@ -189,7 +190,6 @@ var listsPlan = function() {
     }
   })
 };
-//
 //單一明細
 var uniqueListsPlan = function(id) {
     $.ajax({
@@ -225,18 +225,19 @@ var uniqueListsPlan = function(id) {
 };
 //建立item
 var newItem = function() {
+
   $.ajax({
     url: "http://trip/planItem/new",
     type: "POST",  //POST or GET 大寫
     dataType: "JSON",
-    data: list,    // 要傳入的json 物件
+    data: itemList,    // 要傳入的json 物件
     success: function (response) {
       console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
       uniqueListsPlan(response.status);
     },
     error: function () {
       //失敗執行的方法
-      console.log("new fail")
+      console.log("newItem fail")
     }
   })
 };
@@ -245,13 +246,13 @@ var listsItem = function(id) {
 
   $('.itemLists').html('');
   $('.itemLists').append('<table id="listsItem" border="0" width="700" ><tr>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">起始</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">結束</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">地點</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">分類</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">描述</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">預算</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">實際</td></tr>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="startTime" >起始</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="endTime" >結束</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="place" >地點</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="category" >分類</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="description" >描述</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="defaultCost" >預算</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="cost" >實際</td></tr>');
   $('.itemLists').append('<tr>');
   $('.itemLists').append('<td><input name="startTime[]" type="text" size="10"></td>');
   $('.itemLists').append('<td><input name="endTime[]" type="text" size="10"></td>');
