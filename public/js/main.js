@@ -281,11 +281,4 @@ var listsItem = function(id) {
     }
   })
 };
-
 listsPlan();
-
-//haha because today moning I'm very hungry. so think you maybe too.Then buy one for you
-// JQuery
-// .append()
-// .html()
-// .text()
