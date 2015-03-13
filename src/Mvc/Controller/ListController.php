@@ -82,8 +82,7 @@ class ListController
     //*建立item資料
     public function newItem()
     {
-        $planId = $this->Controller->getPost();
-        $status = $this->ListModel->newItem($this->getPost, $planId);
+        $status = $this->ListModel->newItem($this->getPost);
         return View::render(array('status' => $status));
     }
     //*修改item資料

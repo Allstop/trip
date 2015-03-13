@@ -39,6 +39,7 @@ function delItem() {
 }
 //全域變數
 var list={};
+var planId;
 //建立plan～執行go事件
 $("#submit").click(function(){
   if ($(".title").val() == '') {
@@ -66,9 +67,9 @@ $(document).on("click",".item_class",function(){
   var $Span = $($(this).prev().find('span').get(0)),
     tmpStr = $Span.text(),
     tmp = tmpStr.split('：');
-  console.log(tmp);
-  $('.planLists').append(listsItem(tmp[1]));
-
+    planId =tmp[1];
+  listsItem(planId);
+  $('.planLists').append(listsItem(planId));
 });
 //執行del事件
 $(document).on("click",".delete_class",function(){
@@ -77,8 +78,6 @@ $(document).on("click",".delete_class",function(){
       tmp = tmpStr.split('：');
   delPlan(tmp[1]);
 });
-//全域變數
-var itemList={};
 //建立item～執行儲存事件
 $(document).on("click","#submitItem",function(){
     var startTimeVaule = $(".startTime").val();
@@ -88,17 +87,17 @@ $(document).on("click","#submitItem",function(){
     var descriptionVaule = $(".description").val();
     var defaultCostVaule = $(".defaultCost").val();
     var costVaule = $(".cost").val();
-    itemList = {
-      startTime : startTimeVaule,
-      endTime : endTimeVaule,
-      category : categoryVaule,
-      place : placeVaule,
-      description : descriptionVaule,
-      defaultCost : defaultCostVaule,
-      cost : costVaule
-    }
-  console.log(itemList)
-  newItem();
+    var itemList = {
+        planId : planId,
+        startTime : startTimeVaule,
+        endTime : endTimeVaule,
+        category : categoryVaule,
+        planPlaceId : placeVaule,
+        description : descriptionVaule,
+        defaultCost : defaultCostVaule,
+        cost : costVaule
+      }
+  newItem(itemList);
 });
 //建立
 var newPlan = function() {
@@ -127,7 +126,6 @@ var delPlan = function(id) {
 
     success: function (response) {
       console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
-
       listsPlan();
     },
     error: function (response) {
@@ -138,12 +136,12 @@ var delPlan = function(id) {
   })
 };
 //檢查
-var insertPlanCheck = function() {
+var insertPlanCheck = function(id) {
   $.ajax({
     url: "http://trip//plan/insertCheck",
     type: "POST",  //POST or GET 大寫
     dataType: "JSON",
-    data: {id : 20},    // 要傳入的json 物件
+    data: {id : id},    // 要傳入的json 物件
     success: function(response) {
       if (response.status == 'success') {
         newPlan();
@@ -224,43 +222,44 @@ var uniqueListsPlan = function(id) {
 
 };
 //建立item
-var newItem = function() {
-
+var newItem = function(planId) {
+  console.log(planId);
   $.ajax({
     url: "http://trip/planItem/new",
     type: "POST",  //POST or GET 大寫
     dataType: "JSON",
-    data: itemList,    // 要傳入的json 物件
+    data: {id:planId},    // 要傳入的json 物件
     success: function (response) {
       console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
-      uniqueListsPlan(response.status);
+      console.log(response.status);
     },
-    error: function () {
+    error: function (aa) {
       //失敗執行的方法
+      console.log(aa)
       console.log("newItem fail")
     }
   })
 };
 //瀏覽item
-var listsItem = function(id) {
+var listsItem = function(itemList) {
 
   $('.itemLists').html('');
   $('.itemLists').append('<table id="listsItem" border="0" width="700" ><tr>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="startTime" >起始</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="endTime" >結束</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="place" >地點</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="category" >分類</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="description" >描述</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="defaultCost" >預算</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9" class="cost" >實際</td></tr>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">起始</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">結束</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">地點</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">分類</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">描述</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">預算</td>');
+  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">實際</td></tr>');
   $('.itemLists').append('<tr>');
-  $('.itemLists').append('<td><input name="startTime[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input name="endTime[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input name="place[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input name="category[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input name="description[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input name="defaultCost[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input name="cost[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="startTime" name="startTime[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="endTime" name="endTime[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="place" name="place[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="category" name="category[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="description" name="description[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="defaultCost" name="defaultCost[]" type="text" size="10"></td>');
+  $('.itemLists').append('<td><input class="cost" name="cost[]" type="text" size="10"></td>');
   $('.itemLists').append('</tr></table>');
   $('.itemLists').append('<input type="button" value="增加" onclick="addItem()">');
   $('.itemLists').append('<input type="button" value="刪除" onclick="delItem()">');
@@ -268,10 +267,11 @@ var listsItem = function(id) {
 
   $.ajax({
     url: "http://trip/plan/listsItem",
-    type: "GET",  //POST or GET 大寫 I don't have time
+    type: "GET",  //POST or GET 大寫
     dataType: "JSON",
-    data:{id : id} ,
+    data:itemList ,
     success: function (response) {
+      console.log(itemList)
       console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
     },
     error: function () {
@@ -281,4 +281,11 @@ var listsItem = function(id) {
     }
   })
 };
+
 listsPlan();
+
+
+// JQuery
+// .append()
+// .html()
+// .text()

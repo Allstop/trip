@@ -22,27 +22,32 @@ class ListModel
         }
     }
     //*寫入新項目
-    public function newItem($getPost, $planId)
+    public function newItem($getPost)
     {
         if ($this->status !== true) {
             return 'error in create!';
         }
         try{
+//            return $getPost;exit;
+            $_place = $getPost['planPlaceId'];
+            $_planId = $getPost['planId'];
             $_category = $getPost['category'];
             $_startTime = $getPost['startTime'];
             $_endTime = $getPost['endTime'];
             $_description = $getPost['description'];
             $_defaultCost = $getPost['defaultCost'];
             $_cost = $getPost['cost'];
-            $sql = self::$db->prepare("INSERT INTO planitem (planid, category, starttime, endtime, description, defaultcost, cost, createon, modifyon)
-            VALUES (:category, :startTime, :endTime, :description, :defaultCost, :cost)");
-            $sql->bindvalue (':planId', $planId);
+            $sql = self::$db->prepare("INSERT INTO planitem (planplaceid, planid, category, starttime, endtime, description, defaultcost, cost)
+            VALUES (:planPlaceId,:planId, :category, :startTime, :endTime, :description, :defaultCost, :cost)");
+            $sql->bindvalue (':planPlaceId', $_place);
+            $sql->bindvalue (':planId', $_planId);
             $sql->bindvalue (':category', $_category);
             $sql->bindvalue (':startTime', $_startTime);
             $sql->bindvalue (':endTime', $_endTime);
             $sql->bindvalue (':description', $_description);
             $sql->bindvalue (':defaultCost', $_defaultCost);
             $sql->bindvalue (':cost', $_cost);
+//            var_dump($sql->execute());
             return ($sql->execute()) ? '成功' : '失敗';
         }catch(PDOException $e){
             return 'error in insert!';
