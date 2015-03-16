@@ -36,7 +36,7 @@ class ListModel
             $_description = $getPost['description'];
             $_defaultCost = $getPost['defaultCost'];
             $_cost = $getPost['cost'];
-            $sql = self::$db->prepare("INSERT INTO planitem (planplaceid, planid, category, starttime, endtime, description, defaultcost, cost)
+            $sql = self::$db->prepare("INSERT INTO planitem (planPlaceId, planId, category, startTime, endTime, description, defaultCost, cost)
             VALUES (:planPlaceId,:planId, :category, :startTime, :endTime, :description, :defaultCost, :cost)");
             $sql->bindvalue (':planPlaceId', $_place);
             $sql->bindvalue (':planId', $_planId);
@@ -46,7 +46,7 @@ class ListModel
             $sql->bindvalue (':description', $_description);
             $sql->bindvalue (':defaultCost', $_defaultCost);
             $sql->bindvalue (':cost', $_cost);
-            return ($sql->execute()) ? '成功' : '失敗';
+            return ($sql->execute()) ?  $_planId : '失敗';
         }catch(PDOException $e){
             return 'error in insert!';
         }
@@ -59,7 +59,7 @@ class ListModel
         }
 
         try {
-            $sql = self::$db->prepare("SELECT * FROM planitem where planId=$planId");
+            $sql = self::$db->prepare("SELECT * FROM planitem where planId=$planId order by startTime");
             if ($sql->execute()) {
                 return $sql->fetchAll(\PDO::FETCH_ASSOC);
             }else{

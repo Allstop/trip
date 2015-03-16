@@ -30,7 +30,6 @@ class Model
             return 'error in create!';
         }
         try{
-
             $_title = $gtPost['title'];
             $_introduction = $gtPost['introduction'];
             $_nop = $gtPost['nop'];
@@ -45,7 +44,6 @@ class Model
             $sql->bindvalue (':startDate', $_startDate);
             $sql->bindvalue (':endDate', $_endDate);
             $sql->bindvalue (':description', $_description);
-            $lastId = self::$db->lastInsertId();
             return ($sql->execute()) ?  self::$db->lastInsertId(): '失敗';
         }catch(PDOException $e){
             return 'error in insert!';
