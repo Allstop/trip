@@ -15,19 +15,19 @@ function addItem() {
   var num = document.getElementById("listsItem").rows.length;
   var Tr = document.getElementById("listsItem").insertRow(num);
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="startTime[]" type="text" size="10">';
+  Td.innerHTML='<input class="startTime" type="text" size="10">';
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="endTime[]" type="text" size="10">';
+  Td.innerHTML='<input class="endTime" type="text" size="10">';
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="place[]" type="text" size="10">';
+  Td.innerHTML='<input class="planPlaceId" type="text" size="10">';
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="category[]" type="text" size="10">';
+  Td.innerHTML='<input class="category" type="text" size="10">';
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="description[]" type="text" size="10">';
+  Td.innerHTML='<input class="itemDescription" type="text" size="10">';
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="defaultCost[]" type="text" size="10">';
+  Td.innerHTML='<input class="defaultCost" type="text" size="10">';
   Td = Tr.insertCell(Tr.cells.length);
-  Td.innerHTML='<input name="cost[]" type="text" size="10">';
+  Td.innerHTML='<input class="cost" type="text" size="10">';
 }
 //刪除item
 function delItem() {
@@ -40,6 +40,7 @@ function delItem() {
 //全域變數
 var list={};
 var planId;
+
 //建立plan～執行go事件
 $("#submit").click(function(){
   if ($(".title").val() == '') {
@@ -62,29 +63,29 @@ $("#submit").click(function(){
     insertPlanCheck();
   }
 });
-//執行item事件
-$(document).on("click",".item_class",function(){
-  var $Span = $($(this).prev().find('span').get(0)),
-    tmpStr = $Span.text(),
-    tmp = tmpStr.split('：');
-    planId =tmp[1];
-  listsItem(planId);
-  //$('.planLists').append(listsItem(planId));
-});
-//執行del事件
-$(document).on("click",".delete_class",function(){
-  var $Span = $($(this).prev().prev().find('span').get(0)),
-      tmpStr = $Span.text(),
-      tmp = tmpStr.split('：');
-  delPlan(tmp[1]);
+//執行瀏覽/del事件
+$(document).on("click",".planLists button",function(){
+  var $touch=$(this).attr("class"),
+      touchEvent = $touch.split('_class_'),
+      plan_Event=touchEvent[0],
+      plan_id = touchEvent[1];
+  if (plan_Event == 'item') {
+    listsItem(plan_id);
+
+    $('.item_list_'+ plan_id).html('');
+    $('.item_list_'+ plan_id).append('<div class="itemLists"></div>');
+
+  }else if(plan_Event == 'delete') {
+    delPlan(plan_id);
+  }
 });
 //建立item～執行儲存事件
 $(document).on("click","#submitItem",function(){
     var startTimeVaule = $(".startTime").val();
     var endTimeVaule = $(".endTime").val();
-    var placeVaule = $(".place").val();
+    var placeVaule = $(".planPlaceId").val();
     var categoryVaule = $(".category").val();
-    var descriptionVaule = $(".description").val();
+    var descriptionVaule = $(".itemDescription").val();
     var defaultCostVaule = $(".defaultCost").val();
     var costVaule = $(".cost").val();
     var itemList = {
@@ -99,7 +100,7 @@ $(document).on("click","#submitItem",function(){
       }
   newItem(itemList);
 });
-//建立 I think so.
+//建立
 var newPlan = function() {
   $.ajax({
     url: "http://trip/plan/new",
@@ -118,6 +119,7 @@ var newPlan = function() {
 };
 //刪除
 var delPlan = function(id) {
+  console.log(id)
   $.ajax({
     url: "http://trip/plan/del",
     type: "POST",  //POST or GET 大寫
@@ -125,7 +127,7 @@ var delPlan = function(id) {
     data:{id : id} ,
 
     success: function (response) {
-      console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
+      console.log(response)
       listsPlan();
     },
     error: function (response) {
@@ -166,7 +168,7 @@ var listsPlan = function() {
       $('.planLists').html('');
       var title = ['序：','遊記名稱：','簡介：','旅行人數：','旅行日期：','～','描述：','建立時間：'];
       for (var key in response.status) {
-        var $Div = $('<div></div>'),
+        var $Div = $('<div class="plan_'+response.status[key].id+'"></div>'),
           temp = response.status[key];
         i = 0;
         for (var j in temp ) {
@@ -176,11 +178,12 @@ var listsPlan = function() {
           $Div.append('<br/>');
           i++;
         }
-        $('.planLists').append($Div);
-        $('.planLists').append('<button class="item_class" >瀏覽</button>');
-        $('.planLists').append('<button class="delete_class" >刪除</button>');
-        $('.planLists').append('<div></div>');
+        planId = temp.id ;
 
+        $('.planLists').append($Div);
+        $('.planLists').append('<button class="item_class_'+ planId +'" >瀏覽</button>');
+        $('.planLists').append('<button class="delete_class_'+ planId +'" >刪除</button>');
+        $('.planLists').append('<div class="item_list_'+ planId +'" ><div>');
       }
     },
     error: function () {
@@ -210,69 +213,75 @@ var uniqueListsPlan = function(id) {
             i++;
           }
           $('.planLists').append($Div);
-          $('.planLists').append('<button class="item_class" >瀏覽</button>');
-          $('.planLists').append('<button class="del_class" >刪除</button>');
-
+          $('.planLists').append('<button class="item_class_'+ id +'" >瀏覽</button>');
+          $('.planLists').append('<button class="delete_class_'+ id +'" >刪除</button>');
+          $('.planLists').append('<div class="itemLists_'+ id +'" </div>');
         }
       },
       error: function () {
         console.log("unList fail")
       }
     })
-
 };
 //建立item
 var newItem = function(itemList) {
-  console.log(itemList);
   $.ajax({
     url: "http://trip/planItem/new",
-    type: "POST",  //POST or GET 大寫
+    type: "POST",
     dataType: "JSON",
-    data: itemList,    // 要傳入的json 物件
+    data: itemList,
     success: function (response) {
-      console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
-      console.log(response.status);
+      console.log(response)
+      listsItem(response.status);
     },
-    error: function (aa) {
+    error: function () {
       //失敗執行的方法
-      console.log(aa)
       console.log("newItem fail")
     }
   })
 };
 //瀏覽item
-var listsItem = function(planId) {
-
-  console.log(planId);
-  $('.itemLists').html('');
-  $('.itemLists').append('<table id="listsItem" border="0" width="700" ><tr>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">起始</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">結束</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">地點</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">分類</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">描述</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">預算</td>');
-  $('.itemLists').append('<td width="100" bgcolor="#7F9DB9">實際</td></tr>');
-  $('.itemLists').append('<tr>');
-  $('.itemLists').append('<td><input class="startTime" name="startTime[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input class="endTime" name="endTime[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input class="place" name="place[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input class="category" name="category[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input class="description" name="description[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input class="defaultCost" name="defaultCost[]" type="text" size="10"></td>');
-  $('.itemLists').append('<td><input class="cost" name="cost[]" type="text" size="10"></td>');
-  $('.itemLists').append('</tr></table>');
-  $('.itemLists').append('<input type="button" value="增加" onclick="addItem()">');
-  $('.itemLists').append('<input type="button" value="刪除" onclick="delItem()">');
-  $('.itemLists').append('<input type="submit" id="submitItem" value="儲存" >');
-
+var listsItem = function(plan_id) {
+  var title = ["起始","結束","地點","分類","描述","預算","實際"];
+  var $itemLists_id = $('<div class="itemLists_'+plan_id+'"></div>');
+  var $table = $('<table id="listsItem" border="0" width="700px" ></table>');
+  var $Tr = $('<tr></tr>');
+  for (var m in title ) {
+    var $Td = $('<td width="100" bgcolor="#7F9DB9" size="10">'+title[m]+'</td>');
+    $Td.text(title[m]);
+    $Tr.append($Td);
+    $table.append($Tr);
+    $itemLists_id.append($table);
+    m++;
+  }
   $.ajax({
     url: "http://trip/planItem/lists",
     type: "GET",  //POST or GET 大寫
     dataType: "JSON",
-    data:{planId:planId} ,
+    data:{planId:plan_id} ,
     success: function (response) {
-      console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
+      console.log(response)
+      for (var key in response.status) {
+        var $Tr = $('<tr></tr>'),
+            itemTitle = ["startTime","endTime","planPlaceId","category","description","defaultCost","cost"],
+            temp = response.status[key];
+        o=0;
+        for ( o in itemTitle ) {
+          var $Td = $('<td width="100"></td>');
+          $Td.text(temp[itemTitle[o]]);
+          $Tr.append($Td);
+          $table.append($Tr);
+          $itemLists_id.append($table);
+          o++;
+        }
+      }
+
+      $itemLists_id.append('<input type="button" value="增加" onclick="addItem()">');
+      $itemLists_id.append('<input type="button" value="刪除" onclick="delItem()">');
+      $itemLists_id.append('<input type="submit" id="submitItem" value="儲存">');
+      $('.itemLists').html('');
+      $('.itemLists').append($itemLists_id);
+
     },
     error: function () {
       //失敗執行的方法
@@ -280,6 +289,7 @@ var listsItem = function(planId) {
       //console.log("del fail")
     }
   })
+
 };
 
 listsPlan();
