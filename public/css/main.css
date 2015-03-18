@@ -1,3 +1,20 @@
+#aaa {
+   background-color:#ffc991;
+   border-style:solid;
+   color:#8a2f12;
+   border-color: #78788a;
+}
+p {
+   color:#1b16da
+}
+#divShow {
+   background-color:#ffc991;
+   margin-left:15px;
+   margin-right:0px;-webkit-box-shadow:#333333 4px 4px 6px;
+   padding:10px;
+   border:1px dashed #aabbcc;
+}
+
 .planLists {
    padding-top: 60px;
 }
