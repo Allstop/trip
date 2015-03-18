@@ -1,3 +1,9 @@
 .planLists {
    padding-top: 60px;
 }
+.planLists div.plan {
+   border-style:ridge;
+}
+.itemLists td {
+   border-right-style:solid; border-bottom-style:solid;
+}

@@ -71,10 +71,8 @@ $(document).on("click",".planLists button",function(){
       plan_id = touchEvent[1];
   if (plan_Event == 'item') {
     listsItem(plan_id);
-
     $('.item_list_'+ plan_id).html('');
     $('.item_list_'+ plan_id).append('<div class="itemLists"></div>');
-
   }else if(plan_Event == 'delete') {
     delPlan(plan_id);
   }
@@ -108,7 +106,7 @@ var newPlan = function() {
     dataType: "JSON",
     data: list,    // 要傳入的json 物件
     success: function (response) {
-      console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console   (or 右鍵---
+      console.log(response) //成功時在主控台印出 response     --- 主控台按 f12 -> console
       uniqueListsPlan(response.status);
     },
     error: function () {
@@ -122,7 +120,7 @@ var delPlan = function(id) {
   console.log(id)
   $.ajax({
     url: "http://trip/plan/del",
-    type: "POST",  //POST or GET 大寫
+    type: "POST",
     dataType: "JSON",
     data:{id : id} ,
 
@@ -131,9 +129,7 @@ var delPlan = function(id) {
       listsPlan();
     },
     error: function (response) {
-      //失敗執行的方法
       console.log(response)
-      //console.log("del fail")
     }
   })
 };
@@ -141,9 +137,9 @@ var delPlan = function(id) {
 var insertPlanCheck = function(id) {
   $.ajax({
     url: "http://trip//plan/insertCheck",
-    type: "POST",  //POST or GET 大寫
+    type: "POST",
     dataType: "JSON",
-    data: {id : id},    // 要傳入的json 物件
+    data: {id : id},
     success: function(response) {
       if (response.status == 'success') {
         newPlan();
@@ -152,7 +148,6 @@ var insertPlanCheck = function(id) {
       }
     },
     error: function () {
-      //失敗執行的方法
       console.log("check fail")
     }
   })
@@ -164,11 +159,10 @@ var listsPlan = function() {
     type: "GET",
     dataType: "JSON",
     success: function (response) {
-
       $('.planLists').html('');
       var title = ['序：','遊記名稱：','簡介：','旅行人數：','旅行日期：','～','描述：','建立時間：'];
       for (var key in response.status) {
-        var $Div = $('<div class="plan_'+response.status[key].id+'"></div>'),
+        var $Div = $('<div class="plan plan_'+response.status[key].id+'"></div>'),
           temp = response.status[key];
         i = 0;
         for (var j in temp ) {
@@ -178,8 +172,7 @@ var listsPlan = function() {
           $Div.append('<br/>');
           i++;
         }
-        planId = temp.id ;
-
+        planId = temp.id;
         $('.planLists').append($Div);
         $('.planLists').append('<button class="item_class_'+ planId +'" >瀏覽</button>');
         $('.planLists').append('<button class="delete_class_'+ planId +'" >刪除</button>');
@@ -231,11 +224,10 @@ var newItem = function(itemList) {
     dataType: "JSON",
     data: itemList,
     success: function (response) {
-      console.log(response)
+      //console.log(response)
       listsItem(response.status);
     },
     error: function () {
-      //失敗執行的方法
       console.log("newItem fail")
     }
   })
@@ -256,11 +248,11 @@ var listsItem = function(plan_id) {
   }
   $.ajax({
     url: "http://trip/planItem/lists",
-    type: "GET",  //POST or GET 大寫
+    type: "GET",
     dataType: "JSON",
     data:{planId:plan_id} ,
     success: function (response) {
-      console.log(response)
+      //console.log(response)
       for (var key in response.status) {
         var $Tr = $('<tr></tr>'),
             itemTitle = ["startTime","endTime","planPlaceId","category","description","defaultCost","cost"],
@@ -275,7 +267,6 @@ var listsItem = function(plan_id) {
           o++;
         }
       }
-
       $itemLists_id.append('<input type="button" value="增加" onclick="addItem()">');
       $itemLists_id.append('<input type="button" value="刪除" onclick="delItem()">');
       $itemLists_id.append('<input type="submit" id="submitItem" value="儲存">');
@@ -284,17 +275,9 @@ var listsItem = function(plan_id) {
 
     },
     error: function () {
-      //失敗執行的方法
-      console.log()
-      //console.log("del fail")
+      console.log("listsItem fail")
     }
   })
-
 };
 
 listsPlan();
-
-// JQuery
-// .append()
-// .html()
-// .text()
