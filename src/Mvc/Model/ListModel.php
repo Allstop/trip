@@ -59,7 +59,7 @@ class ListModel
         }
 
         try {
-            $sql = self::$db->prepare("SELECT * FROM planitem where planId=$planId");
+            $sql = self::$db->prepare("SELECT * FROM planitem where planId=$planId order by startTime");
             if ($sql->execute()) {
                 return $sql->fetchAll(\PDO::FETCH_ASSOC);
             }else{

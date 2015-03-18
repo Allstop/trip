@@ -183,7 +183,7 @@ var listsPlan = function() {
         $('.planLists').append($Div);
         $('.planLists').append('<button class="item_class_'+ planId +'" >瀏覽</button>');
         $('.planLists').append('<button class="delete_class_'+ planId +'" >刪除</button>');
-        $('.planLists').append('<div class="item_list_'+ planId +'" ><div>');
+        $('.planLists').append('<div class="item_list_'+ planId +'" ></div>');
       }
     },
     error: function () {
