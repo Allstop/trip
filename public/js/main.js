@@ -1,4 +1,7 @@
-
+//全域變數
+var list={};
+var plan_id;
+//日期
 $(function(){
   $( "#datepicker1" ).datepicker({dateFormat: "yy-mm-dd"});
   $( "#datepicker2" ).datepicker({dateFormat: "yy-mm-dd"});
@@ -37,10 +40,6 @@ function delItem() {
     document.getElementById("listsItem").deleteRow(-1);
   }
 }
-//全域變數
-var list={};
-var planId;
-
 //建立plan～執行go事件
 $("#submit").click(function(){
   if ($(".title").val() == '') {
@@ -66,13 +65,13 @@ $("#submit").click(function(){
 //執行瀏覽/del事件
 $(document).on("click",".planLists button",function(){
   var $touch=$(this).attr("class"),
-      touchEvent = $touch.split('_class_'),
-      plan_Event=touchEvent[0],
-      plan_id = touchEvent[1];
+    touchEvent = $touch.split('_class_'),
+    plan_Event=touchEvent[0];
+    plan_id = touchEvent[1];
+
   if (plan_Event == 'item') {
+    $('div[class^="item_list_"]').html('');
     listsItem(plan_id);
-    $('.item_list_'+ plan_id).html('');
-    $('.item_list_'+ plan_id).append('<div class="itemLists"></div>');
   }else if(plan_Event == 'delete') {
     delPlan(plan_id);
   }
@@ -87,7 +86,7 @@ $(document).on("click","#submitItem",function(){
     var defaultCostVaule = $(".defaultCost").val();
     var costVaule = $(".cost").val();
     var itemList = {
-        planId : planId,
+        planId : plan_id,
         startTime : startTimeVaule,
         endTime : endTimeVaule,
         category : categoryVaule,
@@ -224,7 +223,7 @@ var newItem = function(itemList) {
     dataType: "JSON",
     data: itemList,
     success: function (response) {
-      //console.log(response)
+      console.log(response)
       listsItem(response.status);
     },
     error: function () {
@@ -235,7 +234,7 @@ var newItem = function(itemList) {
 //瀏覽item
 var listsItem = function(plan_id) {
   var title = ["起始","結束","地點","分類","描述","預算","實際"];
-  var $itemLists_id = $('<div class="itemLists_'+plan_id+'"></div>');
+  $('.item_list_'+ plan_id).html('');
   var $table = $('<table id="listsItem" border="0" width="700px" ></table>');
   var $Tr = $('<tr></tr>');
   for (var m in title ) {
@@ -243,7 +242,7 @@ var listsItem = function(plan_id) {
     $Td.text(title[m]);
     $Tr.append($Td);
     $table.append($Tr);
-    $itemLists_id.append($table);
+    $('.item_list_'+ plan_id).append($table);
     m++;
   }
   $.ajax({
@@ -263,21 +262,17 @@ var listsItem = function(plan_id) {
           $Td.text(temp[itemTitle[o]]);
           $Tr.append($Td);
           $table.append($Tr);
-          $itemLists_id.append($table);
+          $('.item_list_'+ plan_id).append($table);
           o++;
         }
       }
-      $itemLists_id.append('<input type="button" value="增加" onclick="addItem()">');
-      $itemLists_id.append('<input type="button" value="刪除" onclick="delItem()">');
-      $itemLists_id.append('<input type="submit" id="submitItem" value="儲存">');
-      $('.itemLists').html('');
-      $('.itemLists').append($itemLists_id);
-
+      $('.item_list_'+ plan_id).append('<input type="button" value="增加" onclick="addItem()">');
+      $('.item_list_'+ plan_id).append('<input type="button" value="刪除" onclick="delItem()">');
+      $('.item_list_'+ plan_id).append('<input type="submit" id="submitItem" value="儲存">');
     },
     error: function () {
       console.log("listsItem fail")
     }
   })
 };
-
 listsPlan();

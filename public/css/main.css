@@ -21,6 +21,6 @@ p {
 .planLists div.plan {
    border-style:ridge;
 }
-.itemLists td {
+td {
    border-right-style:solid; border-bottom-style:solid;
 }

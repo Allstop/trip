@@ -29,20 +29,5 @@ $mux->post('/plan/insertCheck', ['Mvc\Controller\Controller', 'insertPlanCheck']
 $mux->post('/planItem/new', ['Mvc\Controller\ListController', 'newItem']);
 //*item瀏覽
 $mux->get('/planItem/lists', ['Mvc\Controller\ListController', 'listsItem']);
-////*item修改
-//$mux->get('/planItem/edit', ['Mvc\Controller\ListController', 'editItem']);
-////*item刪除
-//$mux->get('/planItem/del', ['Mvc\Controller\ListController', 'delItem']);
-////*item建立檢查
-//$mux->post('/plan/insertCheck', ['Mvc\Controller\ListController', 'insertCheckItem']);
-
-//
-//$mux->post('/test/plan/new', ['Mvc\Controller\Controller', 'testNewPlan']);
-//
-//$mux->get('/test/plan/lists', ['Mvc\Controller\Controller', 'testPlanLists']);
-//
-//$mux->get('/test/plan/edit', ['Mvc\Controller\Controller', 'testPlanEdit']);
-//
-//$mux->get('/test/plan/del', ['Mvc\Controller\Controller', 'testPlanDel']);
 
 return $mux;
